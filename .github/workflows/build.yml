@@ -2,9 +2,9 @@
 name: build
 
 on:
+  workflow_dispatch:
   push:
-    branches: [main]
-    workflow_dispatch:
+    tags: ["v*"]
     paths-ignore:
       - README.md
 
