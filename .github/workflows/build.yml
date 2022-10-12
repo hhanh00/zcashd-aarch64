@@ -1,0 +1,37 @@
+---
+name: build
+
+on:
+  push:
+    branches: [main]
+    workflow_dispatch:
+    paths-ignore:
+      - README.md
+
+jobs:
+  release:
+    runs-on: macos-12
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Vagrant base box update
+        run: vagrant box update
+
+      - name: Vagrant scp plugin
+        run: vagrant plugin install vagrant-scp
+
+      - name: Bring up the VM
+        run: vagrant up --provision
+
+      - name: Copy zcashd from vbox
+        run: vagrant scp :zcash/src/zcashd .
+
+      - name: Destroy the VM
+        run: vagrant destroy -f
+
+      - name: Release
+        uses: softprops/action-gh-release@v1
+        with:
+          files: |
+            ./zcashd
