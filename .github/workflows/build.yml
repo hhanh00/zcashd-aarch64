@@ -23,6 +23,8 @@ jobs:
 
       - name: Bring up the VM
         run: vagrant up --provision
+        env:
+          REV: v5.3.0-rc1
 
       - name: Copy zcashd from vbox
         run: vagrant scp :zcash/src/zcashd .
@@ -32,6 +34,7 @@ jobs:
 
       - name: Release
         uses: softprops/action-gh-release@v1
+        if: startsWith(github.ref, 'refs/tags/')
         with:
           files: |
             ./zcashd

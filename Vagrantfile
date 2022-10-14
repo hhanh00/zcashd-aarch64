@@ -8,5 +8,5 @@ Vagrant.configure("2") do |config|
      vb.cpus = "8"
   end
 
-  config.vm.provision "shell", keep_color: "true", path: "./zcash-build.sh", privileged: "false"
+  config.vm.provision "shell", keep_color: "true", path: "./zcash-build.sh", privileged: "false", args: [ENV.fetch('REV', 'master')]
 end
