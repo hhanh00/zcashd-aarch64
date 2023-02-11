@@ -24,7 +24,7 @@ jobs:
       - name: Bring up the VM
         run: vagrant up --provision
         env:
-          REV: v5.3.2
+          REV: v5.4.0
 
       - name: Copy zcashd from vbox
         run: vagrant scp :zcash/src/zcashd .
