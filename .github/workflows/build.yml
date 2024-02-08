@@ -10,31 +10,20 @@ on:
 
 jobs:
   release:
-    runs-on: macos-12
+    runs-on: ubuntu-latest
     steps:
       - name: Checkout
-        uses: actions/checkout@v2
+        uses: actions/checkout@v4
 
-      - name: Vagrant base box update
-        run: vagrant box update
-
-      - name: Vagrant scp plugin
-        run: vagrant plugin install vagrant-scp
-
-      - name: Bring up the VM
-        run: vagrant up --provision
+      - name: Build
         env:
-          REV: v5.8.0
-
-      - name: Copy zcashd from vbox
-        run: vagrant scp :zcash/src/zcashd .
-
-      - name: Destroy the VM
-        run: vagrant destroy -f
+          TAG: v5.8.0
+        run: |
+          ./zcash-build.sh $TAG
 
       - name: Release
         uses: softprops/action-gh-release@v1
         if: startsWith(github.ref, 'refs/tags/')
         with:
           files: |
-            ./zcashd
+            ./zcash/src/zcashd
